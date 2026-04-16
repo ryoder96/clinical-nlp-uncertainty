@@ -33,5 +33,5 @@ Source: https://www.kaggle.com/datasets/tboyle10/medicaltranscriptions
 coming soon
 
 ## Authors
-[Your name] and [Partner name]  
+Rebecca Yoder and Ariadnee Ziady.
 University of Colorado Boulder, 2026
