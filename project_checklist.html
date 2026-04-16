@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NLP Project Checklist</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --border: #1e2d40;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --warn: #f59e0b;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --done: #10b981;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px;
+    background-image: 
+      radial-gradient(ellipse at 20% 0%, rgba(0, 212, 255, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(124, 58, 237, 0.06) 0%, transparent 50%);
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  header {
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #e2e8f0 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 300;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 24px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .meta-chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .meta-chip span { color: var(--accent); }
+
+  .progress-bar {
+    margin-bottom: 48px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .progress-label span { color: var(--accent); }
+
+  .bar-track {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    transition: width 0.8s ease;
+  }
+
+  .phase {
+    margin-bottom: 40px;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .phase-number {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .phase-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .phase-days {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  .task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    user-select: none;
+  }
+
+  .task:hover { border-color: var(--accent); }
+
+  .task.done {
+    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.04);
+  }
+
+  .task.done .task-text { 
+    text-decoration: line-through; 
+    color: var(--muted);
+  }
+
+  .task.urgent {
+    border-left: 3px solid var(--warn);
+  }
+
+  .task.done.urgent {
+    border-left: 3px solid rgba(16, 185, 129, 0.4);
+  }
+
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1.5px solid var(--border);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    background: transparent;
+  }
+
+  .task.done .checkbox {
+    background: var(--done);
+    border-color: var(--done);
+  }
+
+  .checkmark {
+    display: none;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .task.done .checkmark { display: block; }
+
+  .task-content { flex: 1; }
+
+  .task-text {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .task-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .task-note.warn { color: var(--warn); }
+
+  .owner-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .owner-a {
+    background: rgba(0, 212, 255, 0.1);
+    color: var(--accent);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+  }
+
+  .owner-b {
+    background: rgba(124, 58, 237, 0.1);
+    color: #a78bfa;
+    border: 1px solid rgba(124, 58, 237, 0.2);
+  }
+
+  .owner-both {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--accent3);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    margin-bottom: 32px;
+  }
+
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 2px;
+  }
+
+  .reset-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    background: none;
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    float: right;
+  }
+
+  .reset-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+  .question-box {
+    background: rgba(0, 212, 255, 0.04);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-top: 40px;
+  }
+
+  .question-box .tag { margin-bottom: 8px; }
+
+  .question-box p {
+    font-size: 15px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="tag">MSBX 5425 // Final Project</div>
+    <h1>Clinical NLP — Project Checklist</h1>
+    <p class="subtitle">Uncertainty-Aware Specialty Routing from Unstructured Clinical Notes</p>
+    <div class="meta-row">
+      <div class="meta-chip">Timeline: <span>2 weeks</span></div>
+      <div class="meta-chip">Dataset: <span>MTSamples (3,743 notes)</span></div>
+      <div class="meta-chip">Model: <span>ClinicalBERT</span></div>
+      <div class="meta-chip">Method: <span>Conformal Prediction</span></div>
+    </div>
+  </header>
+
+  <div class="legend">
+    <button class="reset-btn" onclick="resetAll()">reset all</button>
+    <div class="legend-item"><div class="legend-dot" style="background:#00d4ff"></div> Person A — Model</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div> Person B — Data</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div> Both</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f59e0b; border-radius:0"></div> Urgent / Don't skip</div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-label">
+      <span>Overall Progress</span>
+      <span id="progress-text">0 / 0 tasks</span>
+    </div>
+    <div class="bar-track">
+      <div class="bar-fill" id="bar-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-number">PHASE 01</div>
+      <div class="phase-title">Data & EDA</div>
+      <div class="phase-days">Days 1–2</div>
+    </div>
+    <div class="task-list">
+      <div class="task done" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Download MTSamples from Kaggle</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task done" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Check missing values, drop null transcriptions (33 rows)</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task done" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Strip whitespace from specialty labels</div>
+          <div class="task-note warn">⚠ Masked the real class counts — critical fix</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task done" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Drop document-type labels (Consult, SOAP, Discharge Summary, Office Notes, Letters, IME, Lab Medicine, Autopsy, Hospice)</div>
+          <div class="task-note">These are process labels, not clinical specialties</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task done" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Drop specialties with fewer than 30 samples</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task done" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Drop notes under 50 words (84 empty/near-empty notes)</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task done" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Drop Podiatry (47 samples — too thin for calibration)</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task done" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Class distribution visualization — 18 specialties, Surgery dominates at 1,076</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task done" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Token length analysis — 67.6% of notes exceed BERT 512 limit</div>
+          <div class="task-note">Addressed via description-first concatenation</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task done" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Keyword overlap analysis — Surgery/Neurology/Neurosurgery confirmed as ambiguous</div>
+          <div class="task-note">This is the core motivation for uncertainty quantification</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Build combined_text column (description + transcription) for BERT input</div>
+          <div class="task-note">Puts most signal-dense content first before truncation</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Save clean dataset to Drive as mtsamples_clean.csv</div>
+          <div class="task-note warn">⚠ Do this before moving on — prevents re-running all preprocessing</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PHASE 2 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-number">PHASE 02</div>
+      <div class="phase-title">Model Training</div>
+      <div class="phase-days">Days 2–4</div>
+    </div>
+    <div class="task-list">
+      <div class="task urgent" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Switch Colab to T4 GPU before training</div>
+          <div class="task-note warn">⚠ Runtime → Change runtime type → T4 GPU. CPU will time out overnight.</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task urgent" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Mount Google Drive before training</div>
+          <div class="task-note warn">⚠ Without this, model is lost when Colab session ends</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Encode specialty labels as integers, save label mapping</div>
+          <div class="task-note">Need this mapping to decode predictions back to specialty names</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Three-way stratified split: 70% train / 15% calibration / 15% test</div>
+          <div class="task-note warn">⚠ Conformal prediction REQUIRES a separate calibration set — not just train/test</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Compute class weights to handle Surgery dominance (28% of data)</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Fine-tune ClinicalBERT — 3 epochs, lr=2e-5, batch size 16</div>
+          <div class="task-note">Target: ~75-82% accuracy. Don't chase higher — move on.</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Add checkpoint saving (save_strategy='epoch') to TrainingArguments</div>
+          <div class="task-note warn">⚠ Protects against Colab disconnecting mid-run</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Save final model and tokenizer to Google Drive</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Baseline evaluation — accuracy, F1 per class, confusion matrix</div>
+          <div class="task-note">Note which specialties confuse each other — this feeds error analysis</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PHASE 3 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-number">PHASE 03</div>
+      <div class="phase-title">Embeddings & Conformal Prediction</div>
+      <div class="phase-days">Days 4–7</div>
+    </div>
+    <div class="task-list">
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Extract CLS embeddings + softmax scores from fine-tuned model</div>
+          <div class="task-note">Use output_hidden_states=True — gets both in one forward pass</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Compute nonconformity scores on calibration set (1 - true label probability)</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Set threshold τ at 90th percentile of calibration scores</div>
+          <div class="task-note">Use ceil formula for finite-sample guarantee: np.ceil((n+1)*0.9)/n</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Generate prediction sets for test set</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Compute k-NN density scores in embedding space (outlier detection)</div>
+          <div class="task-note">k=10, fit on training embeddings, score test embeddings</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Test correlation: do sparse-region notes get wider prediction sets?</div>
+          <div class="task-note">pearsonr(outlier_scores, set_sizes) — this is your core finding</div>
+        </div>
+        <div class="owner-badge owner-both">Both</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">UMAP visualization — color by uncertainty, size by prediction set size</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PHASE 4 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-number">PHASE 04</div>
+      <div class="phase-title">Evaluation & Error Analysis</div>
+      <div class="phase-days">Days 7–10</div>
+    </div>
+    <div class="task-list">
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Coverage metric — true label in prediction set ≥ 90% of the time</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Set size efficiency — average prediction set size at 90% coverage</div>
+          <div class="task-note">Target under 2.0. Compare to naive top-k baseline.</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Calibration curve (reliability diagram) — before vs after conformal prediction</div>
+          <div class="task-note">Professor specifically mentioned this — show miscalibration is fixed</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Error analysis — find confident wrong predictions, check embedding location</div>
+          <div class="task-note">Are confident failures in sparse embedding regions?</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Confusion matrix on point predictions — highlight Surgery/Neurology/Neurosurgery overlap</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Per-class set size analysis — do rare specialties get wider sets?</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PHASE 5 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-number">PHASE 05</div>
+      <div class="phase-title">Stress Testing</div>
+      <div class="phase-days">Days 8–10</div>
+    </div>
+    <div class="task-list">
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Write noise injection function — abbreviations, word dropout, truncation artifacts</div>
+          <div class="task-note">e.g. "shortness of breath" → "SOB", "history of" → "h/o"</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Run noisy test set through pipeline — does uncertainty increase on degraded input?</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Generate 50–100 synthetic hard cases using LLM (deliberately ambiguous notes)</div>
+          <div class="task-note">e.g. chest pain ambiguous between Cardiology and Gastroenterology</div>
+        </div>
+        <div class="owner-badge owner-both">Both</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Run synthetic hard cases through system — do prediction sets widen correctly?</div>
+          <div class="task-note">Qualitative only — no coverage metrics on synthetic data</div>
+        </div>
+        <div class="owner-badge owner-both">Both</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PHASE 6 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-number">PHASE 06</div>
+      <div class="phase-title">Explainability (Span Tagging)</div>
+      <div class="phase-days">Days 9–11</div>
+    </div>
+    <div class="task-list">
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Install scispaCy and load en_core_sci_md model</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Extract medical entities from uncertain prediction cases</div>
+          <div class="task-note">Show WHY the model is unsure — entities overlap between predicted specialties</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Nearest neighbor explanation — surface 3 most similar training notes for uncertain cases</div>
+          <div class="task-note">IR component — "I'm unsure because similar notes were labeled X and Y"</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PHASE 7 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-number">PHASE 07</div>
+      <div class="phase-title">Write-up & Polish</div>
+      <div class="phase-days">Days 11–14</div>
+    </div>
+    <div class="task-list">
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Introduction — frame the clinical problem, motivate uncertainty quantification</div>
+        </div>
+        <div class="owner-badge owner-both">Both</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Related work — cite MedAbstain paper (arXiv 2601.12471), conformal prediction literature</div>
+        </div>
+        <div class="owner-badge owner-both">Both</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Methods section — document every preprocessing decision and why</div>
+        </div>
+        <div class="owner-badge owner-b">Person B</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Results section — coverage, efficiency, calibration curve, UMAP</div>
+        </div>
+        <div class="owner-badge owner-both">Both</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Limitations — MTSamples cleanliness, 512 token truncation, thin calibration on rare classes</div>
+        </div>
+        <div class="owner-badge owner-both">Both</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Future work — MIMIC validation, LongFormer for long notes, full recommendation system</div>
+        </div>
+        <div class="owner-badge owner-both">Both</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Clean up notebook — clear outputs, add markdown headers, make it readable as a paper</div>
+        </div>
+        <div class="owner-badge owner-both">Both</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Build Streamlit demo (if time allows)</div>
+          <div class="task-note">Paste note → get prediction set + confidence + nearest neighbors</div>
+        </div>
+        <div class="owner-badge owner-a">Person A</div>
+      </div>
+      <div class="task" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Prepare 2–3 slide deck for Week 15 showcase</div>
+        </div>
+        <div class="owner-badge owner-both">Both</div>
+      </div>
+      <div class="task urgent" onclick="toggle(this)">
+        <div class="checkbox"><span class="checkmark">✓</span></div>
+        <div class="task-content">
+          <div class="task-text">Submit notebook as PDF + .ipynb by midnight Friday Week 15</div>
+          <div class="task-note warn">⚠ 10% penalty per 24 hours late</div>
+        </div>
+        <div class="owner-badge owner-both">Both</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="question-box">
+    <div class="tag">Core Research Question</div>
+    <p>"Can we build a model that not only routes clinical notes to the right medical specialty, but also reliably signals when it shouldn't be trusted?"</p>
+  </div>
+
+</div>
+
+<script>
+  function toggle(el) {
+    el.classList.toggle('done');
+    updateProgress();
+    saveState();
+  }
+
+  function updateProgress() {
+    const tasks = document.querySelectorAll('.task');
+    const done = document.querySelectorAll('.task.done');
+    const pct = tasks.length ? (done.length / tasks.length * 100) : 0;
+    document.getElementById('bar-fill').style.width = pct + '%';
+    document.getElementById('progress-text').textContent = `${done.length} / ${tasks.length} tasks`;
+  }
+
+  function saveState() {
+    const tasks = document.querySelectorAll('.task');
+    const state = Array.from(tasks).map(t => t.classList.contains('done'));
+    localStorage.setItem('nlp_checklist', JSON.stringify(state));
+  }
+
+  function loadState() {
+    const saved = localStorage.getItem('nlp_checklist');
+    if (!saved) return;
+    const state = JSON.parse(saved);
+    const tasks = document.querySelectorAll('.task');
+    tasks.forEach((t, i) => {
+      if (state[i]) t.classList.add('done');
+      else t.classList.remove('done');
+    });
+    updateProgress();
+  }
+
+  function resetAll() {
+    if (!confirm('Reset all checkboxes?')) return;
+    document.querySelectorAll('.task').forEach(t => t.classList.remove('done'));
+    localStorage.removeItem('nlp_checklist');
+    updateProgress();
+  }
+
+  loadState();
+  updateProgress();
+</script>
+</body>
+</html>
