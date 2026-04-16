@@ -1,0 +1,14 @@
+# Data files
+*.csv
+*.zip
+
+# Checkpoints
+checkpoints/
+final_model/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.pyc
